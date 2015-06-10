@@ -215,6 +215,7 @@ call s:SetOption("degrade",0)
 call s:SetOption("bold",1)
 call s:SetOption("underline",1)
 call s:SetOption("italic",1) " note that we need to override this later if the terminal doesn't support
+call s:SetOption("base16",0)
 call s:SetOption("termcolors",16)
 call s:SetOption("contrast","normal")
 call s:SetOption("visibility","normal")
@@ -280,6 +281,24 @@ elseif (has("gui_running") && g:solarized_degrade == 1)
     let s:blue        = "#0087ff"
     let s:cyan        = "#00afaf"
     let s:green       = "#5f8700"
+elseif g:solarized_base16 && &t_Co >= 16
+    let s:vmode       = "cterm" " Base16 mapping:
+    let s:base03      = "0"     " Base 00
+    let s:base02      = "18"    " Base 01
+    let s:base01      = "19"    " Base 02
+    let s:base00      = "8"     " Base 03
+    let s:base0       = "20"    " Base 04
+    let s:base1       = "7"     " Base 05
+    let s:base2       = "21"    " Base 06
+    let s:base3       = "15"    " Base 07
+    let s:yellow      = "3"     " Base 0A
+    let s:orange      = "16"    " Base 09
+    let s:red         = "1"     " Base 08
+    let s:magenta     = "17"    " Base 0F
+    let s:violet      = "5"     " Base 0E
+    let s:blue        = "4"     " Base 0D
+    let s:cyan        = "6"     " Base 0C
+    let s:green       = "2"     " Base 0B
 elseif g:solarized_termcolors != 256 && &t_Co >= 16
     let s:vmode       = "cterm"
     let s:base03      = "8"
@@ -654,6 +673,7 @@ exe "hi! DiffDelete"     .s:fmt_none   .s:fg_red    .s:bg_base02
 exe "hi! DiffText"       .s:fmt_none   .s:fg_blue   .s:bg_base02 .s:sp_blue
     endif
 endif
+exe "hi! SignColumn"     .s:fmt_none   .s:fg_base0  .s:bg_base02
 exe "hi! Conceal"        .s:fmt_none   .s:fg_blue   .s:bg_none
 exe "hi! SpellBad"       .s:fmt_curl   .s:fg_none   .s:bg_none    .s:sp_red
 exe "hi! SpellCap"       .s:fmt_curl   .s:fg_none   .s:bg_none    .s:sp_violet
@@ -1129,3 +1149,49 @@ autocmd ColorScheme * if g:colors_name != "solarized" | silent! aunmenu Solarize
 "}}}
 "
 "
+
+" Customizations by @skwp for better readability
+" If statements and def statements should look similar
+" so you can see the flow
+hi! link rubyDefine rubyControl
+
+" This is a better cursor
+hi! link Cursor VisualNOS
+
+" Search is way too distracting in original Solarized
+hi! link Search DiffAdd
+
+" Colors to make LustyJuggler more usable
+" the Question color in LustyJuggler is mapped to
+" the currently selected buffer.
+hi! clear Question
+hi! Question guifg=yellow
+
+hi! link TagListFileName  Question
+
+" For jasmine.vim
+hi! link specFunctions rubyDefine
+hi! link specMatcher rubyConstant
+hi! link specSpys rubyConstant
+
+" Ruby, slightly better colors for solarized
+hi! link rubyStringDelimiter rubyConstant
+hi! link rubyInterpolationDelimiter rubyConstant
+hi! link rubySymbol Structure
+
+" For R and other languages that use Delimiters, we don't want them red
+hi! link Delimiter Identifier
+hi! link rDollar Identifier
+
+" For vimscript, don' tlike red..
+hi! link vimMapModKey Operator
+hi! link vimNotation Label
+
+" Better json highlighting
+hi! link htmlArg Label
+
+" Better indication of current buffer
+hi! link StatusLine DiffChange
+hi! link StatusLineNC DiffAdd
+
+hi! VertSplit guifg=#002b36  guibg=#002b36
